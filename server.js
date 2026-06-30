@@ -9,7 +9,7 @@ app.use(express.json());
 
 // Remote Execution API Endpoint
 app.post('/api/execute', (req, res) => {
-    const { extension, code } = req.body;
+    const { ext: extension, code } = req.body;
 
     // Payload validation
     if (!extension || !code) {
@@ -70,4 +70,5 @@ app.post('/api/execute', (req, res) => {
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
     console.log(`Quantum Language Engine API online on port ${PORT}`);
+    module.exports = app;
 });
