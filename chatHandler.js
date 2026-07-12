@@ -94,7 +94,7 @@ The build produces three binaries with distinct roles:
 * **The VM**: A stack-based interpreter built around a \\\`CallFrame\\\` stack. Each frame holds a Closure (chunk + captured upvalues), instruction pointer (\\\`ip\\\`), and a \\\`stackBase\\\` offset for local variables on the value stack.
 * **Exception Handling**: Uses try/catch blocks. \\\`PUSH_HANDLER\\\` records catch IP and stack/frame depths. \\\`RAISE\\\` walks the handler stack, unwinds call frames, and jumps to the catch block.
 
-*Running in local fallback mode. Define \\\`GEMINI_API_KEY\\\` in your backend \\\`.env\\\` file to activate live AI responses.*`,
+*Running in local fallback mode. Define \\\`GROQ_API_KEY\\\` or \\\`GEMINI_API_KEY\\\` in your backend \\\`.env\\\` file to activate live AI responses.*`,
 
     syntax: `### Language Syntax & Features
 Quantum accepts Python-style, JavaScript-style, and C/C++-style syntax — all valid inside the same file.
@@ -174,7 +174,7 @@ let dog = Dog("Rex", "Woof")
 print(dog.speak())
 \\\`\\\`\\\`
 
-*Running in local fallback mode. Define \\\`GEMINI_API_KEY\\\` in your backend \\\`.env\\\` file to activate live AI responses.*`,
+*Running in local fallback mode. Define \\\`GROQ_API_KEY\\\` or \\\`GEMINI_API_KEY\\\` in your backend \\\`.env\\\` file to activate live AI responses.*`,
 
     stdlib: `### Standard Library Reference
 Quantum registers over 200 native helper functions directly in the VM.
@@ -208,7 +208,7 @@ Quantum registers over 200 native helper functions directly in the VM.
 | **%o** | Octal |
 | **%b** | Binary |
 
-*Running in local fallback mode. Define \\\`GEMINI_API_KEY\\\` in your backend \\\`.env\\\` file to activate live AI responses.*`,
+*Running in local fallback mode. Define \\\`GROQ_API_KEY\\\` or \\\`GEMINI_API_KEY\\\` in your backend \\\`.env\\\` file to activate live AI responses.*`,
 
     build: `### Build & CLI Reference
 
@@ -234,7 +234,7 @@ Quantum registers over 200 native helper functions directly in the VM.
   \\\`\\\`\\\`
   *(Uses static linking \\\`-static -static-libgcc -static-libstdc++\\\` on non-MSVC platforms to build standalone binaries)*.
 
-*Running in local fallback mode. Define \\\`GEMINI_API_KEY\\\` in your backend \\\`.env\\\` file to activate live AI responses.*`,
+*Running in local fallback mode. Define \\\`GROQ_API_KEY\\\` or \\\`GEMINI_API_KEY\\\` in your backend \\\`.env\\\` file to activate live AI responses.*`,
 
     help: `### Welcome to Quantum AI Assistant!
 I'm here to help you learn and build applications using the **Quantum Language**.
@@ -247,7 +247,7 @@ Here is what you can ask me about:
 
 *Type a message or select one of the quick prompts to get started!*
 
-*Running in local fallback mode. Define \\\`GEMINI_API_KEY\\\` in your backend \\\`.env\\\` file to activate live AI responses.*`
+*Running in local fallback mode. Define \\\`GROQ_API_KEY\\\` or \\\`GEMINI_API_KEY\\\` in your backend \\\`.env\\\` file to activate live AI responses.*`
 };
 
 async function handleChatRequest(req, res) {
