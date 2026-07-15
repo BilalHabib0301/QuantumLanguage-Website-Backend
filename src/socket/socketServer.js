@@ -3,35 +3,17 @@ const fs = require('fs');
 const path = require('path');
 const crypto = require('crypto');
 const { spawn } = require('child_process');
+const { resolveQrunPath } = require("../services/qrun.service");
 
 let activeConnection = null;
 let activeProcess = null;
 
-function resolveQrunPath() {
-    const candidates = [
-        process.env.QRUN_PATH,
-        path.resolve(__dirname, '..', '..', 'QuantumLanguage', 'qrun.exe'),
-        path.resolve(__dirname, '..', '..', 'QuantumLanguage', 'qrun.bat'),
-        path.join(process.cwd(), 'qrun.exe'),
-        path.join(process.cwd(), 'qrun.bat'),
-    ].filter(Boolean);
-
-    for (const candidate of candidates) {
-        if (fs.existsSync(candidate)) return candidate;
-    }
-    return null;
-}
-
 function setupWebSocket(server) {
     const wss = new WebSocketServer({ server });
-
-    console.log("🟢 WebSocket Server initialized for Live Execution");
 
     wss.on('connection', (ws) => {
         if (activeConnection) activeConnection.close();
         activeConnection = ws;
-
-        ws.send(JSON.stringify({ type: 'status', payload: 'Connected to Quantum Execution Engine' }));
 
         ws.on('message', (message) => {
             try {
@@ -44,27 +26,22 @@ function setupWebSocket(server) {
                             activeProcess = null;
                         }
 
-                        ws.send(JSON.stringify({ type: 'status', payload: 'Compiling script...' }));
-
+                        // Execute directly - no intermediate status messages
                         const fileHash = crypto.randomBytes(8).toString('hex');
                         const tempFilePath = path.join(__dirname, '..', 'tmp', `sandbox_${fileHash}.sa`);
 
                         fs.writeFile(tempFilePath, data.payload, (err) => {
                             if (err) {
                                 ws.send(JSON.stringify({ type: 'stderr', payload: '\x1b[31mSystem Error: Failed to allocate sandbox space.\x1b[0m\r\n' }));
-                                ws.send(JSON.stringify({ type: 'process_completion' }));
                                 return;
                             }
 
                             const qrunPath = resolveQrunPath();
                             if (!qrunPath) {
                                 ws.send(JSON.stringify({ type: 'stderr', payload: '\x1b[31mExecution engine (qrun) not found in backend.\x1b[0m\r\n' }));
-                                ws.send(JSON.stringify({ type: 'process_completion' }));
                                 fs.unlink(tempFilePath, () => {});
                                 return;
                             }
-
-                            ws.send(JSON.stringify({ type: 'status', payload: 'Executing...' }));
 
                             activeProcess = spawn(qrunPath, [tempFilePath]);
 
@@ -81,7 +58,6 @@ function setupWebSocket(server) {
                             activeProcess.on('close', (code) => {
                                 fs.unlink(tempFilePath, () => {});
                                 activeProcess = null;
-                                ws.send(JSON.stringify({ type: 'process_completion' }));
                             });
                         });
                         break;
