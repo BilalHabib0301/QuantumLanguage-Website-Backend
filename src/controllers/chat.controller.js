@@ -71,7 +71,7 @@ When answering:
 
 const LOCAL_FALLBACK_RESPONSES = {
     architecture: `### What is Quantum?
-Quantum is a **dynamically typed, multi-paradigm scripting language** that compiles \`sa\` source files to bytecode and runs them on a custom register-stack VM. It was written in C++17 from scratch.
+Quantum is a **dynamically typed, multi-paradigm scripting language** that compiles \\\`sa\\\` source files to bytecode and runs them on a custom register-stack VM. It was written in C++17 from scratch.
 
 The build produces three binaries with distinct roles:
 | Binary | Role |
@@ -84,7 +84,7 @@ The build produces three binaries with distinct roles:
 1. **quantum — compile + bundle**:
    \\\`.sa\\\` source → **Lexer** (Token stream) → **Parser** (AST) → **TypeChecker** (static warnings only) → **Compiler** (emits bytecode instructions in a Chunk) → **Serializer** (binary payload) → Copy \\\`quantum_stub.exe\\\` to \\\`<file>.exe\\\` and append \\\`[payload bytes][payload size: uint32 LE]["QNTM_VM!" magic]\\\` at the end.
    *When running, the executable seeks to the end, reads the payload size, deserializes the Chunk, and feeds it to the VM.*
-
+   
 2. **qrun — direct interpretation**:
    \\\`.sa\\\` source → **Lexer** → **Parser** → **TypeChecker** → **Compiler** → **VM::run()**.
    *Same pipeline but runs directly in memory without writing any files to disk.*
@@ -111,11 +111,11 @@ int count = 0            # C-style type hint (decorative only - dynamically type
 if x > 0:
     print("positive")    # Python-style
 
-if x > 0 {
+if x > 0 { 
     print("positive")    # brace-style
 }
 
-if (x > 0) {
+if (x > 0) { 
     printf("%d\\\\n", x)   # C-style
 }
 \\\`\\\`\\\`
@@ -241,8 +241,8 @@ I'm here to help you learn and build applications using the **Quantum Language**
 
 Here is what you can ask me about:
 * **Overview & Architecture**: Two execution paths (compile + bundle vs direct interpretation), compiler stack, and stack-based VM call frames.
-* **Language Syntax & Features** (variable styles, OOP inheritance, closures, pointers)
-* **Standard Library & Functions** (cryptography hashes, math helpers, file I/O)
+* **Language Syntax & OOP**: Combining Python, JS, and C/C++ syntax in a single file, closures, OOP with inheritance, exception handling, and pointers.
+* **Standard Library & Crypto**: Over 200 native functions, including hashing (SHA-256/1, MD5), encryption (AES-128 ECB), rot13, base64, Shannon entropy, and file I/O.
 * **Build & CLI Tools**: Running the REPL, running tests, compiling with \\\`quantum.exe\\\`, and using the \\\`qrun.exe\\\` interpreter.
 
 *Type a message or select one of the quick prompts to get started!*
@@ -261,7 +261,7 @@ You can ask me about:
 *Running in local fallback mode. Define \\\`GROQ_API_KEY\\\` or \\\`GEMINI_API_KEY\\\` in your backend \\\`.env\\\` file to activate live AI responses.*`,
 
     creator: `### Creator & Author
-The Quantum Programming Language was designed and built from scratch by **Saad and the QuantumLogics team** using C++17.
+The Quantum Programming Language was designed and built from scratch by **Saad and the QuantumLogics team** using C++17. 
 It features a custom virtual machine, multi-syntax compatibility (Python/JS/C++ styles in a single file), and first-class pointers.
 
 *Running in local fallback mode. Define \\\`GROQ_API_KEY\\\` or \\\`GEMINI_API_KEY\\\` in your backend \\\`.env\\\` file to activate live AI responses.*`,
@@ -274,7 +274,7 @@ Happy to help! Let me know if you want to explore code snippets, standard librar
     farewell: `### Goodbye!
 Thanks for checking out Quantum! Happy hacking, and feel free to ask again whenever you need help with your \\\`.sa\\\` scripts.
 
-*Running in local fallback mode. Define \\\`GROQ_API_KEY\\\` or \\\`GEMINI_API_KEY\\\` in your backend \\\`.env\\\` file to activate live AI responses.*`,
+*Running in local fallback mode. Define \\\`GROQ_API_KEY\\\` or \\\`GEMINI_API_KEY\\\` in your backend \\\`.env\\\` file to activate live AI responses.*`
 };
 
 async function handleChatRequest(req, res) {
@@ -311,7 +311,7 @@ async function handleChatRequest(req, res) {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': \`Bearer \${groqApiKey}\`
+                    'Authorization': `Bearer ${groqApiKey}`
                 },
                 body: JSON.stringify({
                     model: 'llama-3.3-70b-versatile',
@@ -324,7 +324,7 @@ async function handleChatRequest(req, res) {
             if (!response.ok) {
                 const errData = await response.json().catch(() => ({}));
                 console.error('Groq API error status:', response.status, errData);
-                throw new Error(errData.error?.message || \`HTTP error \${response.status}\`);
+                throw new Error(errData.error?.message || `HTTP error ${response.status}`);
             }
 
             const data = await response.json();
@@ -354,7 +354,7 @@ async function handleChatRequest(req, res) {
                 };
             });
 
-            const geminiUrl = \`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=\${geminiApiKey}\`;
+            const geminiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${geminiApiKey}`;
             const response = await fetch(geminiUrl, {
                 method: 'POST',
                 headers: {
@@ -371,7 +371,7 @@ async function handleChatRequest(req, res) {
             if (!response.ok) {
                 const errData = await response.json().catch(() => ({}));
                 console.error('Gemini API error status:', response.status, errData);
-                throw new Error(errData.error?.message || \`HTTP error \${response.status}\`);
+                throw new Error(errData.error?.message || `HTTP error ${response.status}`);
             }
 
             const data = await response.json();
