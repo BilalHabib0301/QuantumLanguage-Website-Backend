@@ -28,7 +28,10 @@ function setupWebSocket(server) {
 
                         // Execute directly - no intermediate status messages
                         const fileHash = crypto.randomBytes(8).toString('hex');
-                        const tempFilePath = path.join(__dirname, '..', 'tmp', `sandbox_${fileHash}.sa`);
+                        const ALLOWED_EXTS = ['.sa', '.js', '.py', '.cpp', '.c'];
+                        const ext = ALLOWED_EXTS.includes(data.ext) ? data.ext : '.sa';
+
+                        const tempFilePath = path.join(__dirname, '..', 'tmp', `sandbox_${fileHash}${ext}`);
 
                         fs.writeFile(tempFilePath, data.payload, (err) => {
                             if (err) {
@@ -44,6 +47,8 @@ function setupWebSocket(server) {
                             }
 
                             activeProcess = spawn(qrunPath, [tempFilePath]);
+                            
+                
 
                             activeProcess.stdout.on('data', (outputData) => {
                                 const text = outputData.toString().replace(/\n/g, '\r\n');
